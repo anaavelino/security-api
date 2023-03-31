@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +33,8 @@ public class TokenService {
                     .withClaim("name",user.getUsername())
                     .withClaim("email", user.getEmail())
                     .withClaim("city", user.getCity())
+                    .withClaim("phone", user.getPhonenumber())
+
                     .sign(algorithn);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("erro ao gerar token", exception);

@@ -2,6 +2,8 @@ package br.com.security.controller;
 
 import br.com.security.domain.commitment.CommitmentRepository;
 import br.com.security.domain.commitment.Commitments;
+import br.com.security.domain.user.Users;
+import br.com.security.domain.user.UsersRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,6 +26,7 @@ public class Commitment {
 
     @Autowired
     private CommitmentRepository repository;
+
     @PostMapping
     public String registerCommitment(@RequestBody @Valid Commitments commitments){
         repository.save(commitments);
@@ -33,13 +36,13 @@ public class Commitment {
     @GetMapping
     public List<Commitments> ListCommiment() {return repository.findAll();}
 
-    @GetMapping("/{idUser}")
-    public ArrayList<Commitments> ListCommimentById(@PathVariable("idUser") long idUser) {
+    @GetMapping("/{id}")
+    public ArrayList<Commitments> ListCommimentById(@PathVariable("id") Users user) {
         var commitments = repository.findAll();
         ArrayList<Commitments> commitmentsUser = new ArrayList<>();
 
         for(Commitments commitment : commitments){
-            if (commitment.getIdUser() == idUser){
+            if (commitment.getIdUser() == user.getId()){
                 commitmentsUser.add(commitment);
             }
         }

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,15 @@ public class Users implements UserDetails {
     private String email;
     private String password;
     private String city;
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
     private String phonenumber;
     private Date dataCad;
 
@@ -85,6 +95,7 @@ public class Users implements UserDetails {
         return dataCad;
     }
 
+
     @Service
     public static class AutenticacaoService implements UserDetailsService {
 
@@ -96,4 +107,5 @@ public class Users implements UserDetails {
             return repository.findByEmail(email);
         }
     }
+
 }
