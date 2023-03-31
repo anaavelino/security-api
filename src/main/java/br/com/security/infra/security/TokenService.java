@@ -1,31 +1,40 @@
 package br.com.security.infra.security;
 
-import br.com.security.usuario.Users;
+import br.com.security.domain.user.Users;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+@Configuration
+@EnableWebSecurity
 @Service
 public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Users users){
+    public String generateToken(Users user){
         try {
             var algorithn = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API Security")
-                    .withSubject(users.getLogin())
+                    .withSubject(user.getEmail())
                     .withExpiresAt(dataExpiration())
-                    .withClaim("name",users.getUsername())
-                    .withClaim("email", users.getEmail())
+                    .withClaim("id", user.getId())
+                    .withClaim("name",user.getUsername())
+                    .withClaim("email", user.getEmail())
+                    .withClaim("city", user.getCity())
+                    .withClaim("phone", user.getPhonenumber())
+
                     .sign(algorithn);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("erro ao gerar token", exception);
@@ -34,15 +43,14 @@ public class TokenService {
 
     public String getSubject(String tokenJWT){
         try {
-            System.out.println(tokenJWT);
-            var algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
+            var algorithm2 = Algorithm.HMAC256(secret);
+            var object =  JWT.require(algorithm2)
                     .withIssuer("API Security")
-                    .build().verify(tokenJWT).getSubject();
-//                    .verify(tokenJWT)
-//                    .getSubject();
+                    .build()
+                    .verify(tokenJWT).getSubject();
+            return object;
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token Inválido ou Expirado!");
+            throw new RuntimeException("Token Inválido ou Expirado! ");
         }
     }
 
