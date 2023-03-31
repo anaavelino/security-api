@@ -1,11 +1,13 @@
-package br.com.security.usuario;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package br.com.security.domain.user;
+
+import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,15 +15,18 @@ import java.util.List;
 
 @Entity
 public class Users implements UserDetails {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String username;
     private String email;
     private String password;
     private String city;
     private String phoneNumber;
 
     public Users(){}
+
+    public Users(Users users){}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -34,7 +39,7 @@ public class Users implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
     @Override
     public boolean isAccountNonExpired() {
@@ -55,6 +60,13 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getEmail() {
         return email;
     }
@@ -63,7 +75,16 @@ public class Users implements UserDetails {
         return city;
     }
 
-    public String getLogin() {
-        return "testes";
+
+    @Service
+    public static class AutenticacaoService implements UserDetailsService {
+
+            @Autowired
+            private UsersRepository repository;
+
+        @Override
+        public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+            return repository.findByEmail(email);
+        }
     }
 }

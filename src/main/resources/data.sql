@@ -1,1 +1,1 @@
-INSERT INTO USERS(name, email , password, city, phone_number) VALUES('Ana', 'anaavelino@testes.com.br', '$2a$10$e4zuijLpjaa6gvAoL676DeZIfY7r8aDu5xabziJhXOUhATQ06xq2.','Fortaleza', '85');
+INSERT INTO USERS(username, email , password, city, phone_number) VALUES('Ana', 'anaavelino@testes.com.br', '$2a$06$9DaK3GT53MSecwRattJqm.d1pwdcj5A95LHe1okVn5g0vSnKuSJZW','Fortaleza', '85');
