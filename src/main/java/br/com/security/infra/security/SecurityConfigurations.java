@@ -27,20 +27,21 @@ public class SecurityConfigurations {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
+                .requestMatchers(HttpMethod.POST,"/register").permitAll()
+               .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
-        @Bean
-        public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-            return configuration.getAuthenticationManager();
-        }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
-        @Bean
-        public PasswordEncoder passwordEncoder(){
-            return new BCryptPasswordEncoder();
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }

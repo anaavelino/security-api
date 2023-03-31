@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,7 +23,8 @@ public class Users implements UserDetails {
     private String email;
     private String password;
     private String city;
-    private String phoneNumber;
+    private String phonenumber;
+    private Date dataCad;
 
     public Users(){}
 
@@ -35,6 +37,10 @@ public class Users implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -75,6 +81,9 @@ public class Users implements UserDetails {
         return city;
     }
 
+    public Date getDataCad() {
+        return dataCad;
+    }
 
     @Service
     public static class AutenticacaoService implements UserDetailsService {
