@@ -1,7 +1,6 @@
 package br.com.security.infra.security;
 
-import br.com.security.usuario.UsuarioRepository;
-import jakarta.servlet.Filter;
+import br.com.security.domain.user.UsersRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.security.auth.Subject;
 import java.io.IOException;
 
 
@@ -22,18 +20,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private UsuarioRepository repository;
+    private UsersRepository repository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenJWT = recoverToken(request);
-        System.out.println("TOKEN ---> "+tokenJWT);
         if(tokenJWT != null){
             var subject = tokenService.getSubject(tokenJWT);
             var user = repository.findByEmail(subject);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            System.out.println("authentication ---> "+tokenJWT);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -44,9 +40,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
-
+        System.out.println(authorizationHeader);
         if(authorizationHeader != null){
-            return authorizationHeader.replace("Bearer ","");
+            return authorizationHeader.replace("Bearer ", "");
         }
 
         return null;
