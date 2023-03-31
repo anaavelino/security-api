@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@Validated
 @RequestMapping("/login")
 public class AutenticacaoController {
     @Autowired
@@ -24,6 +22,7 @@ public class AutenticacaoController {
 
     @PostMapping
     public ResponseEntity login(@RequestBody @Valid AutheticationData data){
+        System.out.println(data.email()+" - "+data.password());
         var token = new UsernamePasswordAuthenticationToken(data.email(), data.password());
 
         var authentication = manager.authenticate(token);

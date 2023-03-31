@@ -28,6 +28,7 @@ public class TokenService {
                     .withIssuer("API Security")
                     .withSubject(user.getEmail())
                     .withExpiresAt(dataExpiration())
+                    .withClaim("id", user.getId())
                     .withClaim("name",user.getUsername())
                     .withClaim("email", user.getEmail())
                     .withClaim("city", user.getCity())

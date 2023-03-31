@@ -23,12 +23,10 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       return  http.csrf().disable()
+       return  http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                .requestMatchers(HttpMethod.POST,"/register").permitAll()
-               .requestMatchers(HttpMethod.GET,"/h2-console/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

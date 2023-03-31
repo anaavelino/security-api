@@ -40,7 +40,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request) {
         var authorizationHeader = request.getHeader("Authorization");
-        System.out.println(authorizationHeader);
+        System.out.println("Authorization"+authorizationHeader);
         if(authorizationHeader != null){
             return authorizationHeader.replace("Bearer ", "");
         }
